@@ -26,7 +26,7 @@ else:
         
 
         
-SIZE = 64
+SIZE =32
 
 def draw_bounding_box():
     contours, _ = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -37,35 +37,29 @@ def draw_bounding_box():
         x,y,w,h = rect
         cv2.rectangle(im,(x,y),(x+w,y+h),(0,255,0),2)
 
-
 def network(x, test=False):
-    # Input:x -> 3,64,64
-
+    # Input:x -> 1,32,32
     # ImageAugmentation
-    h = F.image_augmentation(x, (3,64,64), (0,0), 1, 1, 0, 1, 0, True, True, 0, False, 1, 0.5, False, 0)
-    # Convolution -> 8,58,58
-    h = PF.convolution(h, 8, (7,7), (0,0), name='Convolution')
+    h = F.image_augmentation(x, (1,32,32), (0,0), 1, 1, 0, 1, 0, False, False, 0, False, 1, 0.5, False, 0)
+    # Convolution -> 16,28,28
+    h = PF.convolution(h, 16, (5,5), (0,0), name='Convolution')
     # ReLU
     h = F.relu(h, True)
-    # MaxPooling -> 8,29,29
+    # MaxPooling -> 16,14,14
     h = F.max_pooling(h, (2,2), (2,2))
-    # Convolution_2 -> 10,27,27
-    h = PF.convolution(h, 10, (3,3), (0,0), name='Convolution_2')
-    # MaxPooling_2 -> 10,13,13
+    # Convolution_2 -> 30,12,12
+    h = PF.convolution(h, 30, (3,3), (0,0), name='Convolution_2')
+    # MaxPooling_2 -> 30,6,6
     h = F.max_pooling(h, (2,2), (2,2))
-    # Tanh
+    # Tanh_2
     h = F.tanh(h)
-    # Affine -> 3
-    h = PF.affine(h, (3,), name='Affine')
-    # ReLU_2
-    h = F.relu(h, True)
-    # Affine_2
-    h = PF.affine(h, (3,), name='Affine_2')
+    # Affine_2 -> 2
+    h = PF.affine(h, (2,), name='Affine_2')
     # Softmax
     h = F.softmax(h)
     return h
 
-x = nn.Variable((1,3,SIZE,SIZE))
+x = nn.Variable((1,1,SIZE,SIZE))
 y = network(x, test=True)
 nn.load_parameters("./parameters.h5")
 result_class = "can't identify"
@@ -77,8 +71,8 @@ def pre_processing_frame(frame_in, width, height):
     #resize
     frame_resize = cv2.resize(frame_in, (width, height))
     #channel swap
-    frame_resize = frame_resize[:,:,(2,1,0)]
-    frame_resize = frame_resize.transpose(2,0,1)
+    #frame_resize = frame_resize[:,:,(2,1,0)]
+    #frame_resize = frame_resize.transpose(2,0,1)
     frame_resize = frame_resize*1.0/255
     return frame_resize
 
@@ -86,7 +80,7 @@ def classification(img_in):
     frame_processed = pre_processing_frame(img_in, SIZE, SIZE)
     processed_size = frame_processed.shape[:2]
     print(processed_size)
-    height, width, channel = img_in.shape
+    height, width = img_in.shape
     x.d = frame_processed
     forward = y.forward()
     result_array = y.d[0]
@@ -96,13 +90,11 @@ def classification(img_in):
     prob = result_array[max_index]
     print("result_array.argmax = ", result_array.argmax())
     if max_index == 0:
-        result_class = "Hello Carlos"
+        result_class = "Hello a face"
         print(result_class)
     elif max_index == 1: 
-        result_class = "Hello Emily"
+        result_class = "Hello something else"
         print(result_class)
-    else: 
-        result_class = "can't identify"
     return result_class, str(prob)
 
 def detection(img_in):
@@ -114,15 +106,15 @@ def detection(img_in):
     processed_size = frame_processed.shape
     print(processed_size)
     
-    rows = height/64
-    cols = width/64
+    rows = height/32
+    cols = width/32
     print("rows = ", rows, "cols = ", cols)
     # init an empty arrat for for the prediction
     detections = np.zeros((rows, cols))
 
     for i in range(0, rows):
         for j in range(0, cols):
-            grid_square = frame_processed[:,i*64:(i+1)*64, j*64:(j+1)*64]
+            grid_square = frame_processed[:,i*32:(i+1)*32, j*32:(j+1)*32]
             x.d = grid_square
             forward = y.forward()
             detections[i,j] = y.d[0].argmax()
@@ -134,8 +126,8 @@ def change_pixel_colour(img, detections):
     for i in range(detections.shape[0]):
         for j in range(detections.shape[1]):
             if int(detections[i, j]) ==0 | int(detections[i, j])==1:
-                for pixel_i in range(i*64, (i+1)*64):
-                    for pixel_j in range(j*64, (j+1)*64):
+                for pixel_i in range(i*32, (i+1)*32):
+                    for pixel_j in range(j*32, (j+1)*32):
                         img[pixel_i, pixel_j,:] = [100,0,0]
         
 
@@ -154,13 +146,11 @@ while(True):
     ret, frame = cap.read()
 
     #Our operations on the frame come here
-    #gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     font = cv2.FONT_ITALIC
     x_axis = 10 #position of text
     y_axis = 20 #position of text
    
-    frame_to_process = frame.copy()
-
     if CAPTURE:
         for i in range(CAP_NUM):
             frame_to_process = cv2.resize(frame_to_process, (SIZE, SIZE))
@@ -173,16 +163,16 @@ while(True):
         cv2.destoryAllWindows()
 
     if RECOGNITION:
-        original_size = frame_to_process.shape[:2]
+        original_size = gray.shape[:2]
         print(original_size)
 
-        #result = classification(frame)
-        #cv2_face_tracking(frame)
-        detection(frame)
-        #date_time =  datetime.datetime.now()
-        #datetime_str = date_time.strftime('%d %H:%M:%S')
-        #text_to_display = datetime_str + "\n " + result[0] + "\n probability: " + result[1]
-        #cv2.putText(frame, text_to_display, (x_axis,y_axis), font, 0.8, 255) 
+        result = classification(gray)
+        #cv2_face_tracking(gray)
+        #detection(gray)
+        date_time =  datetime.datetime.now()
+        datetime_str = date_time.strftime('%d %H:%M:%S')
+        text_to_display = datetime_str + "\n " + result[0] + "\n probability: " + result[1]
+        cv2.putText(frame, text_to_display, (x_axis,y_axis), font, 0.8, 255) 
     #Draw the text
 
     #display the reulting frame
