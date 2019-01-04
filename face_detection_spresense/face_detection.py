@@ -99,9 +99,12 @@ def classification(img_in):
 
 def detection(img_in):
     # ToDo: convert the color channel
-    height, width, channel = img_in.shape
-    print("img_shape" + "height = ", height, "width = ", width, "channel = ", channel)
+    # input gray, no colour channel
+    #height, width, channel = img_in.shape
+    #print("img_shape" + "height = ", height, "width = ", width, "channel = ", channel)
 
+    height, width = img_in.shape
+    print("img_shape" + "height = ", height, "width = ", width, "channel = ")
     frame_processed = pre_processing_frame(img_in, width, height)
     processed_size = frame_processed.shape
     print(processed_size)
@@ -114,23 +117,45 @@ def detection(img_in):
 
     for i in range(0, rows):
         for j in range(0, cols):
-            grid_square = frame_processed[:,i*32:(i+1)*32, j*32:(j+1)*32]
+            grid_square = frame_processed[i*32:(i+1)*32, j*32:(j+1)*32]
             x.d = grid_square
             forward = y.forward()
             detections[i,j] = y.d[0].argmax()
             print("i, j, result = ", i, j,detections[i,j] )
     print(detections)
-    change_pixel_colour(img_in, detections)
+    bounding_box = countering(detections)
+    print("bounding box", bounding_box)
+    #drawing_mask(img_in, bounding_box)
+    mask_without_countering(img_in, detections)
 
-def change_pixel_colour(img, detections):
+def drawing_mask(img, bounding_box):
+    for i in range(bounding_box[0],bounding_box[2]):
+        for j in range(bounding_box[1], bounding_box[3]):
+            img[i,j] = 0
+
+def countering(detections):
+    count = 0
+    bounding_box = [0,0,0,0]
     for i in range(detections.shape[0]):
         for j in range(detections.shape[1]):
-            if int(detections[i, j]) ==0 | int(detections[i, j])==1:
+            if detections[i,j] == 0:
+                if count == 0:
+                    bounding_box[0] = i*32
+                    bounding_box[1]= j*32
+                    count += 1
+                else:
+                    bounding_box[2] = i*32
+                    bounding_box[3] = j*32
+    return bounding_box
+
+def mask_without_countering(img,detections):
+    for i in range(detections.shape[0]):
+        for j in range(detections.shape[1]):
+            if detections[i, j] == 0:
                 for pixel_i in range(i*32, (i+1)*32):
                     for pixel_j in range(j*32, (j+1)*32):
-                        img[pixel_i, pixel_j,:] = [100,0,0]
-        
-
+                        img[pixel_i, pixel_j] = 0
+               
 
 def cv2_face_tracking(frame):
         faces = faceCascade.detectMultiScale(frame)
@@ -166,17 +191,17 @@ while(True):
         original_size = gray.shape[:2]
         print(original_size)
 
-        result = classification(gray)
+        #result = classification(gray)
         #cv2_face_tracking(gray)
-        #detection(gray)
+        detection(gray)
         date_time =  datetime.datetime.now()
         datetime_str = date_time.strftime('%d %H:%M:%S')
-        text_to_display = datetime_str + "\n " + result[0] + "\n probability: " + result[1]
-        cv2.putText(frame, text_to_display, (x_axis,y_axis), font, 0.8, 255) 
+        text_to_display = datetime_str  
+        cv2.putText(gray, text_to_display, (x_axis,y_axis), font, 0.8, 255) 
     #Draw the text
 
     #display the reulting frame
-    cv2.imshow('frame',frame)
+    cv2.imshow('frame',gray)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
