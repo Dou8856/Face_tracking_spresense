@@ -109,8 +109,8 @@ def detection(img_in):
     processed_size = frame_processed.shape
     print(processed_size)
     
-    rows = height/32
-    cols = width/32
+    rows = int(height/32)
+    cols = int(width/32)
     print("rows = ", rows, "cols = ", cols)
     # init an empty arrat for for the prediction
     detections = np.zeros((rows, cols))
