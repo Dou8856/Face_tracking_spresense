@@ -24,7 +24,6 @@ if len(sys.argv) >= 2:
 else:
     RECOGNITION = True
         
-
         
 SIZE =32
 
@@ -37,22 +36,53 @@ def draw_bounding_box():
         x,y,w,h = rect
         cv2.rectangle(im,(x,y),(x+w,y+h),(0,255,0),2)
 
+#def network(x, test=False):
+#    # Input:x -> 1,32,32
+#    # ImageAugmentation
+#    h = F.image_augmentation(x, (1,32,32), (0,0), 1, 1, 0, 1, 0, False, False, 0, False, 1, 0.5, False, 0)
+#    # Convolution -> 16,28,28
+#    h = PF.convolution(h, 16, (5,5), (0,0), name='Convolution')
+#    # ReLU
+#    h = F.relu(h, True)
+#    # MaxPooling -> 16,14,14
+#    h = F.max_pooling(h, (2,2), (2,2))
+#    # Convolution_2 -> 30,12,12
+#    h = PF.convolution(h, 30, (3,3), (0,0), name='Convolution_2')
+#    # MaxPooling_2 -> 30,6,6
+#    h = F.max_pooling(h, (2,2), (2,2))
+#    # Tanh_2
+#    h = F.tanh(h)
+#    # Affine_2 -> 2
+#    h = PF.affine(h, (2,), name='Affine_2')
+#    # Softmax
+#    h = F.softmax(h)
+#    return h
+#
+#x = nn.Variable((1,1,SIZE,SIZE))
+#y = network(x, test=True)
+#nn.load_parameters("./parameters.h5")
+
+
 def network(x, test=False):
-    # Input:x -> 1,32,32
+    # Input:x -> 1,128,128
     # ImageAugmentation
-    h = F.image_augmentation(x, (1,32,32), (0,0), 1, 1, 0, 1, 0, False, False, 0, False, 1, 0.5, False, 0)
-    # Convolution -> 16,28,28
+    h = F.image_augmentation(x, (1,128,128), (0,0), 1, 1, 0, 1, 0, False, False, 0, False, 1, 0.5, False, 0)
+    # Convolution -> 16,124,124
     h = PF.convolution(h, 16, (5,5), (0,0), name='Convolution')
     # ReLU
     h = F.relu(h, True)
-    # MaxPooling -> 16,14,14
+    # MaxPooling -> 16,62,62
     h = F.max_pooling(h, (2,2), (2,2))
-    # Convolution_2 -> 30,12,12
+    # Convolution_2 -> 30,60,60
     h = PF.convolution(h, 30, (3,3), (0,0), name='Convolution_2')
-    # MaxPooling_2 -> 30,6,6
+    # MaxPooling_2 -> 30,30,30
     h = F.max_pooling(h, (2,2), (2,2))
     # Tanh_2
     h = F.tanh(h)
+    # Affine -> 150
+    h = PF.affine(h, (150,), name='Affine')
+    # ReLU_2
+    h = F.relu(h, True)
     # Affine_2 -> 2
     h = PF.affine(h, (2,), name='Affine_2')
     # Softmax
@@ -61,8 +91,8 @@ def network(x, test=False):
 
 x = nn.Variable((1,1,SIZE,SIZE))
 y = network(x, test=True)
-nn.load_parameters("./parameters.h5")
 result_class = "can't identify"
+nn.load_parameters("./results_current_50.nnp")
 cascPath = "../opencv/data/haarcascades/haarcascade_frontalface_alt.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
 print (faceCascade)
@@ -109,51 +139,51 @@ def detection(img_in):
     processed_size = frame_processed.shape
     print(processed_size)
     
-    rows = int(height/32)
-    cols = int(width/32)
+    rows = height/SIZE
+    cols = width/SIZE
     print("rows = ", rows, "cols = ", cols)
     # init an empty arrat for for the prediction
     detections = np.zeros((rows, cols))
 
     for i in range(0, rows):
         for j in range(0, cols):
-            grid_square = frame_processed[i*32:(i+1)*32, j*32:(j+1)*32]
+            grid_square = frame_processed[i*SIZE:(i+1)*SIZE, j*SIZE:(j+1)*SIZE]
             x.d = grid_square
             forward = y.forward()
             detections[i,j] = y.d[0].argmax()
             print("i, j, result = ", i, j,detections[i,j] )
     print(detections)
-    bounding_box = countering(detections)
-    print("bounding box", bounding_box)
+    #bounding_box = contouring(detections)
+    #print("bounding box", bounding_box)
     #drawing_mask(img_in, bounding_box)
-    mask_without_countering(img_in, detections)
+    mask_without_contouring(img_in, detections)
 
 def drawing_mask(img, bounding_box):
     for i in range(bounding_box[0],bounding_box[2]):
         for j in range(bounding_box[1], bounding_box[3]):
             img[i,j] = 0
 
-def countering(detections):
+def contouring(detections):
     count = 0
     bounding_box = [0,0,0,0]
     for i in range(detections.shape[0]):
         for j in range(detections.shape[1]):
             if detections[i,j] == 0:
                 if count == 0:
-                    bounding_box[0] = i*32
-                    bounding_box[1]= j*32
+                    bounding_box[0] = i*SIZE
+                    bounding_box[1]= j*SIZE
                     count += 1
                 else:
-                    bounding_box[2] = i*32
-                    bounding_box[3] = j*32
+                    bounding_box[2] = i*SIZE
+                    bounding_box[3] = j*SIZE
     return bounding_box
 
-def mask_without_countering(img,detections):
+def mask_without_contouring(img,detections):
     for i in range(detections.shape[0]):
         for j in range(detections.shape[1]):
             if detections[i, j] == 0:
-                for pixel_i in range(i*32, (i+1)*32):
-                    for pixel_j in range(j*32, (j+1)*32):
+                for pixel_i in range(i*SIZE, (i+1)*SIZE):
+                    for pixel_j in range(j*SIZE, (j+1)*SIZE):
                         img[pixel_i, pixel_j] = 0
                
 
