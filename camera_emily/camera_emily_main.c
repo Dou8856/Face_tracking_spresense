@@ -73,6 +73,9 @@
 #  endif
 #endif
 
+#include <dnnrt/runtime.h>
+#include "loader_nnb.h"
+#include "pnm_util.h"
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
@@ -217,9 +220,9 @@ static inline void ycbcr2rgb(uint8_t y,  uint8_t cb, uint8_t cr,
   _r = (128 * (y-16) +                  202 * (cr-128) + 64) / 128;
   _g = (128 * (y-16) -  24 * (cb-128) -  60 * (cr-128) + 64) / 128;
   _b = (128 * (y-16) + 238 * (cb-128)                  + 64) / 128;
-//  *r = (int)itou8(_r)*0.3;
-//  *g = (int)itou8(_g)*0.5;
-//  *b = (int)itou8(_b)*0.2;
+  *r = (int)itou8(_r)*0.3;
+  *g = (int)itou8(_g)*0.5;
+  *b = (int)itou8(_b)*0.2;
 }
 
 static inline uint16_t ycbcrtorgb565(uint8_t y, uint8_t cb, uint8_t cr)
@@ -239,7 +242,7 @@ static inline uint16_t ycbcrtorgb565(uint8_t y, uint8_t cb, uint8_t cr)
 
 static void yuv2rgb(void *buf, uint32_t size)
 {
-	printf("Emily: func_yuv2rgb");
+	printf("Emily: func_yuv2rgb\n");
   struct uyvy_s *ptr;
   struct uyvy_s uyvy;
   uint16_t *dest;
@@ -484,7 +487,6 @@ printf("Emily: main function\n");
           goto errout_with_buffer;
         }
 
-//	printf("Emily: buf:\n buf.m.offset = %d\n buf.m.userptr = %d\n buf.length = %d\n", buf.m.offset, buf.m.userptr, buf.length);
 
 #ifdef CONFIG_EXAMPLES_CAMERA_EMILY_OUTPUT_LCD
       if (format == V4L2_PIX_FMT_UYVY)
@@ -492,33 +494,34 @@ printf("Emily: main function\n");
           /* Convert YUV color format to RGB565 */
 #  ifdef CONFIG_IMAGEPROC
 memset(gray_buf_ptr, 0, IMAGE_YUV_SIZE);
+/*
 	imageproc_convert_yuv2gray((void *)buf.m.userptr, 
 		(void*)gray_buf_ptr, 
 		VIDEO_HSIZE_QVGA, 
-		VIDEO_VSIZE_QVGA);
+		VIDEO_VSIZE_QVGA);*/
 	imageproc_convert_yuv2rgb(
-		(void*)gray_buf_ptr, 
+		(void *)buf.m.userptr,
 		VIDEO_HSIZE_QVGA, 
 		VIDEO_VSIZE_QVGA);
-int i = 0;
-uint16_t* pixel_ptr = (uint16_t *)gray_buf_ptr;
-uint16_t pixel = *pixel_ptr;
 
-while (i <= IMAGE_YUV_SIZE/2)
+int i = 0;
+uint16_t* pixel_ptr = buf.m.userptr;
+
+while (i < IMAGE_YUV_SIZE/2)
 {	
-	printf("i:%d value = %d\n", i, pixel);
-	uint16_t r = ((pixel >> 11) & (0X1F));
-	uint16_t g = (pixel >> 5) & (0X3F);
-	uint16_t b = (pixel) & (0X1F);
-	printf("Emily: i = %d, pixel= %d, r = %d, g = %d, b = %d\n", i, pixel, r,g,b);
-	pixel = *pixel_ptr++;
+	uint16_t r = ((*pixel_ptr >> 11) & (0X1F));
+	uint16_t g = (*pixel_ptr >> 5) & (0X3F);
+	uint16_t b = (*pixel_ptr) & (0X1F);
+	uint16_t gray = g/2;
+	*pixel_ptr = (gray <<11 | gray << 5 | gray);
 	i++;
+	pixel_ptr ++;
 }
 #  else
           yuv2rgb((void *)buf.m.userptr, buf.bytesused);
 #  endif
-          nximage_image(g_nximage.hbkgd, (void *)gray_buf_ptr);
-         // nximage_image(g_nximage.hbkgd, (void *)buf.m.userptr);
+          //nximage_image(g_nximage.hbkgd, (void *)gray_buf_ptr);
+         nximage_image(g_nximage.hbkgd, (void *)buf.m.userptr);
         }
 #endif /* CONFIG_EXAMPLES_CAMERA_EMILY_OUTPUT_LCD */
 

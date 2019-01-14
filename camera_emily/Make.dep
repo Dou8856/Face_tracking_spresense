@@ -135,4 +135,7 @@ camera_emily_main.o: camera_emily_main.c \
  /home/CORPUSERS/23060814/Source/Spresense/spresense/nuttx/include/nuttx/nx/nxglib.h \
  /home/CORPUSERS/23060814/Source/Spresense/spresense/nuttx/include/fixedmath.h \
  nximage.h \
- /home/CORPUSERS/23060814/Source/Spresense/spresense/sdk/modules/include/imageproc/imageproc.h
+ /home/CORPUSERS/23060814/Source/Spresense/spresense/sdk/modules/include/imageproc/imageproc.h \
+ /home/CORPUSERS/23060814/Source/Spresense/spresense/sdk/modules/include/dnnrt/runtime.h \
+ /home/CORPUSERS/23060814/Source/Spresense/spresense/sdk/modules/include/dnnrt/nnablart/network.h \
+ loader_nnb.h pnm_util.h
