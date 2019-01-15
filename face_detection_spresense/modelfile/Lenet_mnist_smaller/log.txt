@@ -1,0 +1,18 @@
+2019-01-15 14:55:59,875 Training process is started.
+python "C:\Users\23060814\Desktop\NNC_130\libs\nnabla\python\src\nnabla\utils\cli\cli.py" train
+	-c "C:\Users\23060814\Desktop\NNC_130\samples\sample_project\image_recognition\MNIST\LeNet.files\20190115_145559\net.nntxt"
+	-o "C:\Users\23060814\Desktop\NNC_130\samples\sample_project\image_recognition\MNIST\LeNet.files\20190115_145559"
+2019-01-15 14:56:03,463 [nnabla]: Train with contexts ['cpu']
+2019-01-15 14:56:03,637 [nnabla]: Training epoch 1 of 10 begin
+2019-01-15 14:56:49,616 [nnabla]: epoch 1 of 10 cost=0.235625  {train_error=0.086321, valid_error=0.080293} time=(29.1s /291.2s)
+2019-01-15 14:57:28,091 [nnabla]: epoch 2 of 10 cost=0.073001  {train_error=0.056326, valid_error=0.054772} time=(70.1s /350.6s)
+2019-01-15 14:58:06,557 [nnabla]: epoch 3 of 10 cost=0.055396  {train_error=0.041515, valid_error=0.045389} time=(108.6s /362.1s)
+2019-01-15 14:58:45,142 [nnabla]: epoch 4 of 10 cost=0.046409  {train_error=0.037685, valid_error=0.045774} time=(147.0s /367.6s)
+2019-01-15 14:59:24,544 [nnabla]: epoch 5 of 10 cost=0.039282  {train_error=0.044728, valid_error=0.049303} time=(186.3s /372.7s)
+2019-01-15 14:59:48,579 [nnabla]: epoch 6 of 10 cost=0.033674  time=(224.9s /375.0s)
+2019-01-15 15:00:13,302 [nnabla]: epoch 7 of 10 cost=0.029220  time=(249.6s /356.6s)
+2019-01-15 15:00:37,231 [nnabla]: epoch 8 of 10 cost=0.025627  time=(273.6s /342.0s)
+2019-01-15 15:01:01,135 [nnabla]: epoch 9 of 10 cost=0.023288  time=(297.5s /330.6s)
+2019-01-15 15:01:40,171 [nnabla]: epoch 10 of 10 cost=0.021456  {train_error=0.014036, valid_error=0.034140} time=(321.7s /321.7s)
+2019-01-15 15:01:40,188 [nnabla]: Training Completed.
+NNabla command line interface (Version 1.0.8, Build 181005012621)
