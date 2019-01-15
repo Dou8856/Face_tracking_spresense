@@ -1,0 +1,14 @@
+2019-01-15 13:40:16,061 Evaluation process is started.
+python "C:\Users\23060814\Desktop\NNC_130\libs\nnabla\python\src\nnabla\utils\cli\cli.py" forward
+	-c "C:\Users\23060814\Desktop\NNC_130\samples\face_tracking\face_tracking.files\20190115_133849\results.nnp"
+	-d "C:\Users\23060814\Desktop\NNC_130\samples\sample_dataset\Face_non_face\32_32_80_20\test.csv"
+	-o "C:\Users\23060814\Desktop\NNC_130\samples\face_tracking\face_tracking.files\20190115_133849"
+2019-01-15 13:40:18,773 [nnabla]: data 64 / 428
+2019-01-15 13:40:18,842 [nnabla]: data 128 / 428
+2019-01-15 13:40:18,908 [nnabla]: data 192 / 428
+2019-01-15 13:40:18,979 [nnabla]: data 256 / 428
+2019-01-15 13:40:19,063 [nnabla]: data 320 / 428
+2019-01-15 13:40:19,140 [nnabla]: data 384 / 428
+2019-01-15 13:40:19,207 [nnabla]: data 428 / 428
+2019-01-15 13:40:19,209 [nnabla]: Forward Completed.
+NNabla command line interface (Version 1.0.8, Build 181005012621)
