@@ -1,0 +1,20 @@
+2019-01-15 14:11:51,059 Training process is started.
+python "C:\Users\23060814\Desktop\NNC_130\libs\nnabla\python\src\nnabla\utils\cli\cli.py" train
+	-c "C:\Users\23060814\Desktop\NNC_130\samples\sample_project\image_recognition\MNIST\LeNet.files\20190115_141151\net.nntxt"
+	-o "C:\Users\23060814\Desktop\NNC_130\samples\sample_project\image_recognition\MNIST\LeNet.files\20190115_141151"
+2019-01-15 14:11:54,072 [nnabla]: Creating cache data for "C:\Users\23060814\Desktop\NNC_130\samples\sample_dataset\mnist\mnist_training.csv"
+2019-01-15 14:13:34,495 [nnabla]: Creating cache data for "C:\Users\23060814\Desktop\NNC_130\samples\sample_dataset\mnist\mnist_test.csv"
+2019-01-15 14:13:49,259 [nnabla]: Train with contexts ['cpu']
+2019-01-15 14:13:49,394 [nnabla]: Training epoch 1 of 10 begin
+2019-01-15 14:14:39,065 [nnabla]: epoch 1 of 10 cost=0.161187  {train_error=0.049037, valid_error=0.046958} time=(30.6s /306.3s)
+2019-01-15 14:15:22,663 [nnabla]: epoch 2 of 10 cost=0.048383  {train_error=0.028980, valid_error=0.035173} time=(77.5s /387.5s)
+2019-01-15 14:16:06,046 [nnabla]: epoch 3 of 10 cost=0.034948  {train_error=0.024426, valid_error=0.036403} time=(120.3s /401.1s)
+2019-01-15 14:16:46,574 [nnabla]: epoch 4 of 10 cost=0.025768  {train_error=0.016005, valid_error=0.033957} time=(161.5s /403.9s)
+2019-01-15 14:17:28,617 [nnabla]: epoch 5 of 10 cost=0.019278  {train_error=0.020463, valid_error=0.041799} time=(203.4s /406.9s)
+2019-01-15 14:17:56,045 [nnabla]: epoch 6 of 10 cost=0.015683  time=(246.6s /411.0s)
+2019-01-15 14:18:28,932 [nnabla]: epoch 7 of 10 cost=0.012306  time=(279.5s /399.4s)
+2019-01-15 14:18:54,657 [nnabla]: epoch 8 of 10 cost=0.011746  time=(305.3s /381.6s)
+2019-01-15 14:19:20,550 [nnabla]: epoch 9 of 10 cost=0.008108  time=(331.2s /368.0s)
+2019-01-15 14:20:00,454 [nnabla]: epoch 10 of 10 cost=0.010144  {train_error=0.005449, valid_error=0.033259} time=(356.2s /356.3s)
+2019-01-15 14:20:00,494 [nnabla]: Training Completed.
+NNabla command line interface (Version 1.0.8, Build 181005012621)
