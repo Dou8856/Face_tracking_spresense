@@ -1,0 +1,40 @@
+2019-01-25 17:37:06,131 Training process is started.
+python "C:\Users\23060814\Desktop\NNC_130\libs\nnabla\python\src\nnabla\utils\cli\cli.py" train
+	-c "C:\Users\23060814\Desktop\NNC_130\samples\face_tracking\face_tracking2.0.files\20190125_173706\net.nntxt"
+	-o "C:\Users\23060814\Desktop\NNC_130\samples\face_tracking\face_tracking2.0.files\20190125_173706"
+2019-01-25 17:37:09,686 [nnabla]: Creating cache data for "C:\Users\23060814\Desktop\NNC_130\samples\sample_dataset\Face_non_face\64_64_80_20\train.csv"
+2019-01-25 17:37:11,960 [nnabla]: Creating cache data for "C:\Users\23060814\Desktop\NNC_130\samples\sample_dataset\Face_non_face\64_64_80_20\test.csv"
+2019-01-25 17:37:12,570 [nnabla]: Train with contexts ['cpu']
+2019-01-25 17:37:12,595 [nnabla]: Training epoch 1 of 30 begin
+2019-01-25 17:37:14,270 [nnabla]: epoch 1 of 30 cost=0.693138  {train_error=0.692847, valid_error=0.693132} time=(1.1s /33.7s)
+2019-01-25 17:37:15,770 [nnabla]: epoch 2 of 30 cost=0.692762  {train_error=0.692242, valid_error=0.692646} time=(2.7s /40.9s)
+2019-01-25 17:37:17,180 [nnabla]: epoch 3 of 30 cost=0.685050  {train_error=0.652538, valid_error=0.661663} time=(4.0s /40.2s)
+2019-01-25 17:37:18,618 [nnabla]: epoch 4 of 30 cost=0.563880  {train_error=0.443425, valid_error=0.442664} time=(5.5s /41.9s)
+2019-01-25 17:37:19,976 [nnabla]: epoch 5 of 30 cost=0.401561  {train_error=0.387758, valid_error=0.372037} time=(6.8s /41.1s)
+2019-01-25 17:37:20,841 [nnabla]: epoch 6 of 30 cost=0.371146  time=(8.2s /41.5s)
+2019-01-25 17:37:21,687 [nnabla]: epoch 7 of 30 cost=0.340571  time=(9.1s /39.2s)
+2019-01-25 17:37:22,538 [nnabla]: epoch 8 of 30 cost=0.294401  time=(9.9s /37.3s)
+2019-01-25 17:37:23,390 [nnabla]: epoch 9 of 30 cost=0.264645  time=(10.8s /36.1s)
+2019-01-25 17:37:24,732 [nnabla]: epoch 10 of 30 cost=0.209083  {train_error=0.211998, valid_error=0.240508} time=(11.6s /35.0s)
+2019-01-25 17:37:25,539 [nnabla]: epoch 11 of 30 cost=0.209326  time=(12.9s /35.4s)
+2019-01-25 17:37:26,491 [nnabla]: epoch 12 of 30 cost=0.188337  time=(13.9s /34.8s)
+2019-01-25 17:37:27,320 [nnabla]: epoch 13 of 30 cost=0.164774  time=(14.7s /34.1s)
+2019-01-25 17:37:28,248 [nnabla]: epoch 14 of 30 cost=0.169288  time=(15.7s /33.6s)
+2019-01-25 17:37:29,082 [nnabla]: epoch 15 of 30 cost=0.152523  time=(16.5s /33.0s)
+2019-01-25 17:37:29,914 [nnabla]: epoch 16 of 30 cost=0.143404  time=(17.3s /32.5s)
+2019-01-25 17:37:30,717 [nnabla]: epoch 17 of 30 cost=0.130553  time=(18.1s /32.1s)
+2019-01-25 17:37:31,517 [nnabla]: epoch 18 of 30 cost=0.137112  time=(18.9s /31.6s)
+2019-01-25 17:37:32,380 [nnabla]: epoch 19 of 30 cost=0.124835  time=(19.8s /31.3s)
+2019-01-25 17:37:33,708 [nnabla]: epoch 20 of 30 cost=0.123135  {train_error=0.123672, valid_error=0.135241} time=(20.6s /30.9s)
+2019-01-25 17:37:34,662 [nnabla]: epoch 21 of 30 cost=0.120709  time=(22.1s /31.6s)
+2019-01-25 17:37:35,508 [nnabla]: epoch 22 of 30 cost=0.120547  time=(22.9s /31.3s)
+2019-01-25 17:37:36,379 [nnabla]: epoch 23 of 30 cost=0.100343  time=(23.7s /31.0s)
+2019-01-25 17:37:37,171 [nnabla]: epoch 24 of 30 cost=0.096069  time=(24.6s /30.8s)
+2019-01-25 17:37:38,093 [nnabla]: epoch 25 of 30 cost=0.112829  time=(25.5s /30.6s)
+2019-01-25 17:37:38,919 [nnabla]: epoch 26 of 30 cost=0.095091  time=(26.3s /30.4s)
+2019-01-25 17:37:39,748 [nnabla]: epoch 27 of 30 cost=0.089212  time=(27.2s /30.2s)
+2019-01-25 17:37:40,579 [nnabla]: epoch 28 of 30 cost=0.084672  time=(28.0s /30.0s)
+2019-01-25 17:37:41,332 [nnabla]: epoch 29 of 30 cost=0.084138  time=(28.7s /29.8s)
+2019-01-25 17:37:42,467 [nnabla]: epoch 30 of 30 cost=0.075762  {train_error=0.066909, valid_error=0.136640} time=(29.4s /29.5s)
+2019-01-25 17:37:42,502 [nnabla]: Training Completed.
+NNabla command line interface (Version 1.0.8, Build 181005012621)
